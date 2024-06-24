@@ -4,7 +4,7 @@ using UnityEditor;
 #endif
 using UnityEngine;
 
-namespace TarodevController
+namespace TreeController
 {
     [CreateAssetMenu]
     public class PlayerStats : ScriptableObject

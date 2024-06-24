@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 #endif
 
-namespace TarodevController
+namespace TreeController
 {
     public class PlayerInput : MonoBehaviour
     {

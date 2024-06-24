@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace TarodevController
+namespace TreeController
 {
     public class PlayerAnimator : MonoBehaviour
     {
@@ -95,6 +95,8 @@ namespace TarodevController
             HandleCrouching();
 
             HandleWallSlideEffects();
+
+            _anim.SetFloat("Speed", Mathf.Abs(_player.Velocity.x));
         }
 
         private void LateUpdate()

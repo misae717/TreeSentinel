@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace TarodevController
+namespace TreeController
 {
     [RequireComponent(typeof(Rigidbody2D), typeof(BoxCollider2D), typeof(CapsuleCollider2D))]
     public class PlayerController : MonoBehaviour, IPlayerController, IPhysicsObject
@@ -14,6 +14,8 @@ namespace TarodevController
         private ConstantForce2D _constantForce;
         private Rigidbody2D _rb;
         private PlayerInput _playerInput;
+
+        [SerializeField] private Transform spriteTransform;
 
         #endregion
 
@@ -47,7 +49,7 @@ namespace TarodevController
         public void LoadState(ControllerState state)
         {
             RepositionImmediately(state.Position);
-            _rb.rotation = state.Rotation;
+            //_rb.rotation = state.Rotation;
             SetVelocity(state.Velocity);
 
             if (state.Grounded) ToggleGrounded(true);
@@ -128,6 +130,15 @@ namespace TarodevController
             SaveCharacterState();
         }
 
+            private void LateUpdate()
+        {
+            // Reset the rotation of the sprite to zero every frame
+            if (spriteTransform != null)
+            {
+                spriteTransform.localRotation = Quaternion.identity;
+            }
+        }
+
         #endregion
 
         #region Setup
@@ -147,6 +158,7 @@ namespace TarodevController
 
             _rb = GetComponent<Rigidbody2D>();
             _rb.hideFlags = HideFlags.NotEditable;
+
 
             // Primary collider
             _collider = GetComponent<BoxCollider2D>();
