@@ -10,7 +10,9 @@ public class SlimeAI : MonoBehaviour
     private Transform target;
 
     public float moveSpeed = 3f;
-    public float jumpForce = 7f;
+    public float jumpForce = 10f;
+    public float minJumpAngle = 75f;
+    public float maxJumpAngle = 85f;
     public float nextWaypointDistance = 1f;
     public float groundCheckDistance = 0.1f;
     public float cliffCheckDistance = 1f;
@@ -23,12 +25,15 @@ public class SlimeAI : MonoBehaviour
     private float jumpCooldown = 0.5f;
     private float jumpTimer;
     public float minJumpHeight = 0.5f;
-    public float extraJumpHeight = 0.2f;
 
-    public float backawayDistance = 1f;
-    public float backawaySpeed = 2f;
-    private bool isBackingAway = false;
-    private Vector2 backawayDirection;
+    public float playerProximityThreshold = 1f;
+    private float pathUpdateCooldown = 0.5f;
+    private float lastPathUpdateTime;
+
+    private bool jumpQueued = false;
+    private Vector2 queuedJumpDirection;
+    private float lastJumpTime;
+    public float jumpTimeout = 1f;
 
     void Start()
     {
@@ -45,7 +50,10 @@ public class SlimeAI : MonoBehaviour
     void UpdatePath()
     {
         if (seeker.IsDone() && target != null)
+        {
             seeker.StartPath(rb.position, target.position, OnPathComplete);
+            lastPathUpdateTime = Time.time;
+        }
     }
 
     void OnPathComplete(Path p)
@@ -62,39 +70,47 @@ public class SlimeAI : MonoBehaviour
         CheckGrounded();
         
         if (path == null || currentWaypoint >= path.vectorPath.Count)
+        {
+            if (Time.time - lastPathUpdateTime > pathUpdateCooldown)
+            {
+                UpdatePath();
+            }
             return;
+        }
 
         Vector2 direction = ((Vector2)path.vectorPath[currentWaypoint] - rb.position).normalized;
         
-        if (isBackingAway)
+        if (Vector2.Distance(rb.position, target.position) < playerProximityThreshold)
         {
-            BackAway();
+            // When close to the player, stop moving and prepare to attack
+            rb.velocity = Vector2.zero;
+            return;
         }
-        else if (IsCliffAhead(direction))
+
+        if (jumpQueued && isGrounded && canJump)
         {
-            if (ShouldJump(direction))
-            {
-                TryJump(direction);
-            }
-            else
-            {
-                rb.velocity = new Vector2(0, rb.velocity.y); // Stop horizontal movement
-            }
+            TryJump(queuedJumpDirection);
+            jumpQueued = false;
         }
-        else if (IsObstacleAhead(direction))
+        else if (IsCliffAhead(direction) && isGrounded)
+        {
+            AvoidCliff();
+        }
+        else if (IsObstacleAhead(direction) && isGrounded)
         {
             HandleObstacle(direction);
         }
-        else
+        else if (isGrounded)
         {
             Move(direction);
         }
 
         float distance = Vector2.Distance(rb.position, path.vectorPath[currentWaypoint]);
         if (distance < nextWaypointDistance)
+        {
             currentWaypoint++;
+        }
 
-        // Update jump timer
         if (jumpTimer > 0)
             jumpTimer -= Time.fixedDeltaTime;
     }
@@ -102,11 +118,8 @@ public class SlimeAI : MonoBehaviour
     void Move(Vector2 direction)
     {
         float moveHorizontal = direction.x;
-        
-        // Apply horizontal movement
         rb.velocity = new Vector2(moveHorizontal * moveSpeed, rb.velocity.y);
 
-        // Flip sprite if necessary
         if (moveHorizontal != 0)
         {
             transform.localScale = new Vector3(Mathf.Sign(moveHorizontal), 1, 1);
@@ -132,26 +145,34 @@ public class SlimeAI : MonoBehaviour
 
     void TryJump(Vector2 direction)
     {
-        if (!canJump) return;
+        if (!canJump || !isGrounded || Time.time - lastJumpTime < jumpTimeout) return;
 
+        rb.velocity = Vector2.zero;
         Vector2 jumpDirection = CalculateJumpDirection(direction);
         rb.AddForce(jumpDirection * jumpForce, ForceMode2D.Impulse);
         
         canJump = false;
         jumpTimer = jumpCooldown;
-        Debug.Log("Jump executed in direction: " + jumpDirection);
+        lastJumpTime = Time.time;
     }
 
     Vector2 CalculateJumpDirection(Vector2 pathDirection)
     {
-        float pathAngle = Mathf.Atan2(pathDirection.y, pathDirection.x);
-        float jumpAngle = pathAngle + extraJumpHeight;
-        return new Vector2(Mathf.Cos(jumpAngle), Mathf.Sin(jumpAngle)).normalized;
+        float baseAngle = (pathDirection.x >= 0) ? minJumpAngle : (180 - minJumpAngle);
+        float angleAdjustment = Mathf.Lerp(0, maxJumpAngle - minJumpAngle, Mathf.Abs(pathDirection.y));
+        float finalAngle = baseAngle + angleAdjustment;
+        float radians = finalAngle * Mathf.Deg2Rad;
+        Vector2 jumpDir = new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
+        jumpDir.x = Mathf.Sign(pathDirection.x) * Mathf.Abs(jumpDir.x);
+        return jumpDir.normalized;
     }
 
     void CheckGrounded()
     {
-        isGrounded = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, groundLayer);
+        isGrounded = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, groundLayer) ||
+                     Physics2D.Raycast(transform.position + Vector3.right * 0.4f, Vector2.down, groundCheckDistance, groundLayer) ||
+                     Physics2D.Raycast(transform.position + Vector3.left * 0.4f, Vector2.down, groundCheckDistance, groundLayer);
+
         if (isGrounded && rb.velocity.y <= 0)
         {
             canJump = true;
@@ -160,76 +181,60 @@ public class SlimeAI : MonoBehaviour
 
     bool IsCliffAhead(Vector2 direction)
     {
-        Vector2 rayStart = (Vector2)transform.position + direction * 0.5f;
-        RaycastHit2D hit = Physics2D.Raycast(rayStart, Vector2.down, cliffCheckDistance, groundLayer);
-        Debug.DrawRay(rayStart, Vector2.down * cliffCheckDistance, hit ? Color.green : Color.red);
-        return !hit;
+        Vector2 rightCheck = (Vector2)transform.position + Vector2.right * 0.5f + direction * 0.5f;
+        Vector2 leftCheck = (Vector2)transform.position + Vector2.left * 0.5f + direction * 0.5f;
+
+        bool rightCliff = !Physics2D.Raycast(rightCheck, Vector2.down, cliffCheckDistance, groundLayer);
+        bool leftCliff = !Physics2D.Raycast(leftCheck, Vector2.down, cliffCheckDistance, groundLayer);
+
+        return rightCliff || leftCliff;
     }
 
     bool IsObstacleAhead(Vector2 direction)
     {
         Vector2 rayStart = transform.position;
         RaycastHit2D hit = Physics2D.Raycast(rayStart, direction, sideCheckDistance, obstacleLayer);
-        Debug.DrawRay(rayStart, direction * sideCheckDistance, hit ? Color.red : Color.green);
         return hit;
     }
 
     void HandleObstacle(Vector2 direction)
     {
-        if (!isBackingAway)
+        if (isGrounded)
         {
-            // Start backing away
-            isBackingAway = true;
-            backawayDirection = -direction; // Back away in the opposite direction of the obstacle
-            return;
-        }
-
-        if (ShouldJump(direction))
-        {
-            isBackingAway = false;
-            TryJump(direction);
+            jumpQueued = true;
+            queuedJumpDirection = direction;
         }
     }
 
-    void BackAway()
+    void AvoidCliff()
     {
-        rb.velocity = backawayDirection * backawaySpeed;
-        
-        // Check if we've backed away enough
-        if (!IsObstacleAhead(-backawayDirection))
-        {
-            isBackingAway = false;
-        }
+        // Stop movement to avoid falling off the cliff
+        rb.velocity = new Vector2(0, rb.velocity.y);
     }
 
     void OnDrawGizmos()
     {
-        // Visualize ground check
         Gizmos.color = Color.yellow;
         Gizmos.DrawLine(transform.position, transform.position + Vector3.down * groundCheckDistance);
+        Gizmos.DrawLine(transform.position + Vector3.right * 0.4f, transform.position + Vector3.right * 0.4f + Vector3.down * groundCheckDistance);
+        Gizmos.DrawLine(transform.position + Vector3.left * 0.4f, transform.position + Vector3.left * 0.4f + Vector3.down * groundCheckDistance);
 
-        // Visualize cliff checks
-        Gizmos.color = Color.blue;
-        Gizmos.DrawLine(transform.position + Vector3.right * 0.5f, transform.position + Vector3.right * 0.5f + Vector3.down * cliffCheckDistance);
-        Gizmos.DrawLine(transform.position + Vector3.left * 0.5f, transform.position + Vector3.left * 0.5f + Vector3.down * cliffCheckDistance);
-
-        // Visualize side obstacle checks
         if (path != null && currentWaypoint < path.vectorPath.Count)
         {
             Vector2 direction = ((Vector2)path.vectorPath[currentWaypoint] - (Vector2)transform.position).normalized;
             Gizmos.color = Color.red;
             Gizmos.DrawLine(transform.position, transform.position + (Vector3)(direction * sideCheckDistance));
-            
-            // Draw opposite side check
-            Gizmos.color = Color.magenta;
-            Gizmos.DrawLine(transform.position, transform.position + (Vector3)(-direction * sideCheckDistance));
         }
 
-        // Visualize backaway direction when active
-        if (isBackingAway)
+        if (jumpQueued)
         {
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawLine(transform.position, transform.position + (Vector3)(backawayDirection * backawayDistance));
+            Vector2 jumpDir = CalculateJumpDirection(queuedJumpDirection);
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawLine(transform.position, transform.position + (Vector3)(jumpDir * 2));
         }
+
+        // Visualize player proximity threshold
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, playerProximityThreshold);
     }
 }

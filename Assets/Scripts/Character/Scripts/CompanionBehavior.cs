@@ -10,11 +10,15 @@ public class CompanionBehavior : MonoBehaviour
     public float floatRange = 0.2f; // Range of the Y-axis float movement
     public float floatSpeed = 1.0f; // Speed of the Y-axis float movement
     public float followSpeed = 3.0f; // Speed at which the companion follows the player
+    public GameObject fireballPrefab; // Reference to the fireball prefab
+    public Transform firePoint; // Point from where the fireball will be shot
+    public float fireRate = 0.5f; // Time between shots
 
     private float angle;
     private float originalY;
     private SpriteRenderer spriteRenderer;
     private SpriteRenderer playerSpriteRenderer;
+    private float nextFireTime;
 
     void Start()
     {
@@ -24,6 +28,16 @@ public class CompanionBehavior : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         // Get the SpriteRenderer component of the player's Sprite GameObject
         playerSpriteRenderer = player.Find("Visual/Effects/Sprite").GetComponent<SpriteRenderer>();
+
+        // Debug logs to verify assignments
+        if (fireballPrefab == null)
+        {
+            Debug.LogError("Fireball Prefab is not assigned in the Inspector");
+        }
+        if (firePoint == null)
+        {
+            Debug.LogError("Fire Point is not assigned in the Inspector");
+        }
     }
 
     void Update()
@@ -54,7 +68,27 @@ public class CompanionBehavior : MonoBehaviour
             spriteRenderer.sortingOrder = playerOrderInLayer - 1; // Behind the player
             spriteRenderer.flipX = false;
         }
+
+        // Handle firing
+        if (Input.GetMouseButton(0) && Time.time > nextFireTime)
+        {
+            Fire();
+            nextFireTime = Time.time + fireRate;
+        }
+    }
+
+    void Fire()
+    {
+        if (fireballPrefab == null || firePoint == null)
+        {
+            Debug.LogError("Fireball Prefab or Fire Point is not assigned");
+            return;
+        }
+
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 direction = (mousePosition - firePoint.position).normalized;
+
+        GameObject fireball = Instantiate(fireballPrefab, firePoint.position, Quaternion.identity);
+        fireball.GetComponent<FireballBehavior>().SetDirection(direction);
     }
 }
-
-

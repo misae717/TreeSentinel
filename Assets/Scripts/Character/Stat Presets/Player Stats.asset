@@ -17,17 +17,17 @@ MonoBehaviour:
     m_Bits: 128
   CollisionLayers:
     serializedVersion: 2
-    m_Bits: 769
+    m_Bits: 777
   CharacterSize:
-    Height: 1.35
-    Width: 0.9
-    StepHeight: 0.6
-    CrouchHeight: 0.8
-    RayInset: 0.1
+    Height: 1.21
+    Width: 0.27
+    StepHeight: 0.74571013
+    CrouchHeight: 1.21
+    RayInset: 0.0265
   VerticalDeadZoneThreshold: 0.3
   HorizontalDeadZoneThreshold: 0.1
   PositionCorrectionMode: 0
-  BaseSpeed: 3
+  BaseSpeed: 5
   Acceleration: 70
   Friction: 70
   AirFrictionMultiplier: 0.5
@@ -36,18 +36,18 @@ MonoBehaviour:
   ExtraConstantGravity: 40
   BufferedJumpTime: 0.15
   CoyoteTime: 0.15
-  JumpPower: 8
+  JumpPower: 10
   EndJumpEarlyExtraForceMultiplier: 3
   MaxAirJumps: 1
-  AllowDash: 1
+  AllowDash: 0
   DashVelocity: 30
   DashDuration: 0.1
   DashCooldown: 0.5
   DashEndHorizontalMultiplier: 0.5
-  AllowCrouching: 1
+  AllowCrouching: 0
   CrouchSlowDownTime: 1
   CrouchSpeedModifier: 0.3
-  AllowWalls: 1
+  AllowWalls: 0
   ClimbableLayer:
     serializedVersion: 2
     m_Bits: 256
@@ -61,7 +61,7 @@ MonoBehaviour:
   WallPopForce: 10
   WallCoyoteTime: 0.3
   WallDetectorRange: 0.15
-  AllowLadders: 1
+  AllowLadders: 0
   LadderCooldownTime: 0.15
   AutoAttachToLadders: 1
   SnapToLadders: 1

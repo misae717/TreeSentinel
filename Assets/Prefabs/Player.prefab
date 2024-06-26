@@ -20004,8 +20004,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.675}
-  m_Size: {x: 0.85999995, y: 1.3100001}
+  m_Offset: {x: 0, y: 0.605}
+  m_Size: {x: 0.23000002, y: 1.1700001}
   m_Direction: 0
 --- !u!1 &3054942120628204824
 GameObject:
@@ -35162,6 +35162,9 @@ MonoBehaviour:
   floatRange: 0.2
   floatSpeed: 1
   followSpeed: 3
+  fireballPrefab: {fileID: 0}
+  firePoint: {fileID: 0}
+  fireRate: 0.5
 --- !u!1 &7092977998462913754
 GameObject:
   m_ObjectHideFlags: 0
