@@ -49,7 +49,6 @@ namespace TreeController
         public void LoadState(ControllerState state)
         {
             RepositionImmediately(state.Position);
-            //_rb.rotation = state.Rotation;
             SetVelocity(state.Velocity);
 
             if (state.Grounded) ToggleGrounded(true);
@@ -73,6 +72,7 @@ namespace TreeController
         #endregion
 
         [SerializeField] private bool _drawGizmos = true;
+        [SerializeField] private bool _inCutscene = false; // New field for cutscene state
 
         #region Loop
 
@@ -104,7 +104,7 @@ namespace TreeController
         {
             _delta = delta;
 
-            if (!Active) return;
+            if (!Active || _inCutscene) return; // Add cutscene check here
 
             RemoveTransientVelocity();
 
@@ -130,7 +130,7 @@ namespace TreeController
             SaveCharacterState();
         }
 
-            private void LateUpdate()
+        private void LateUpdate()
         {
             // Reset the rotation of the sprite to zero every frame
             if (spriteTransform != null)
@@ -159,7 +159,6 @@ namespace TreeController
             _rb = GetComponent<Rigidbody2D>();
             _rb.hideFlags = HideFlags.NotEditable;
 
-
             // Primary collider
             _collider = GetComponent<BoxCollider2D>();
             _collider.edgeRadius = CharacterSize.COLLIDER_EDGE_RADIUS;
@@ -185,8 +184,14 @@ namespace TreeController
 
         private void GatherInput()
         {
-            _frameInput = _playerInput.Gather();
+            if (_inCutscene)
+            {
+                // If in cutscene, clear all input
+                _frameInput = new FrameInput();
+                return;
+            }
 
+            _frameInput = _playerInput.Gather();
 
             if (_frameInput.JumpDown)
             {
@@ -401,7 +406,7 @@ namespace TreeController
         private bool HorizontalInputPressed => Mathf.Abs(_frameInput.Move.x) > Stats.HorizontalDeadZoneThreshold;
         private bool IsPushingAgainstWall => HorizontalInputPressed && (int)Mathf.Sign(_frameDirection.x) == _wallDirThisFrame;
 
-        private void CalculateWalls()
+private void CalculateWalls()
         {
             if (!Stats.AllowWalls) return;
 
@@ -548,7 +553,6 @@ namespace TreeController
 
             if ((!_endedJumpEarly && !_grounded && !_frameInput.JumpHeld && Velocity.y > 0) || Velocity.y < 0) _endedJumpEarly = true; // Early end detection
 
-
             if (_time > _returnWallInputLossAfter) _wallJumpInputNerfPoint = Mathf.MoveTowards(_wallJumpInputNerfPoint, 1, _delta / Stats.WallJumpInputLossReturnTime);
         }
 
@@ -674,7 +678,6 @@ namespace TreeController
         {
             Physics2D.queriesHitTriggers = false;
             var hit = Physics2D.OverlapBox(pos, size, 0, Stats.CollisionLayers);
-            //var hit = Physics2D.OverlapCapsule(pos, size - new Vector2(SKIN_WIDTH, 0), _collider.direction, 0, ~Stats.PlayerLayer);
             Physics2D.queriesHitTriggers = _cachedQueryMode;
             return !hit;
         }
@@ -876,7 +879,6 @@ namespace TreeController
 
         #endregion
 
-
         private void SaveCharacterState()
         {
             State = new ControllerState
@@ -948,6 +950,26 @@ namespace TreeController
 
             Gizmos.color = Color.black;
             Gizmos.DrawRay(RayPoint, Vector3.right);
+        }
+
+        #endregion
+
+        #region Cutscene Support
+
+        public void ToggleCutsceneMode(bool enabled)
+        {
+            _inCutscene = enabled;
+            if (_inCutscene)
+            {
+                // Disable player movement
+                SetVelocity(Vector2.zero);
+                _rb.isKinematic = true;
+            }
+            else
+            {
+                // Re-enable player movement
+                _rb.isKinematic = false;
+            }
         }
 
         #endregion
