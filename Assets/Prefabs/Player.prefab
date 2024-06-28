@@ -35200,7 +35200,17 @@ MonoBehaviour:
   fireRate: 1
   floatHeight: 1.5
   floatDuration: 2
+  rotationDuration: 1
   attachDuration: 1
+  dialogueMessage: 'Hello!
+
+    I''m your new companion.'
+  dialogueDuration: 3
+  textOffset: {x: 0, y: 0.5, z: 0}
+  textWidth: 2
+  textHeight: 1
+  textSortingOrder: 100
+  sortingLayerName: UI
 --- !u!1 &7092977998462913754
 GameObject:
   m_ObjectHideFlags: 0
