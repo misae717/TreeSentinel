@@ -39,7 +39,7 @@ MonoBehaviour:
   JumpPower: 10
   EndJumpEarlyExtraForceMultiplier: 3
   MaxAirJumps: 1
-  AllowDash: 0
+  AllowDash: 1
   DashVelocity: 30
   DashDuration: 0.1
   DashCooldown: 0.5
@@ -47,7 +47,7 @@ MonoBehaviour:
   AllowCrouching: 0
   CrouchSlowDownTime: 1
   CrouchSpeedModifier: 0.3
-  AllowWalls: 0
+  AllowWalls: 1
   ClimbableLayer:
     serializedVersion: 2
     m_Bits: 256

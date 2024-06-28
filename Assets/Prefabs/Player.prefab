@@ -35198,6 +35198,9 @@ MonoBehaviour:
   fireballPrefab: {fileID: 414269863452689344, guid: 5a92982183e10cb4999148f5b7f13597, type: 3}
   firePoint: {fileID: 169643347645628049}
   fireRate: 1
+  floatHeight: 1.5
+  floatDuration: 2
+  attachDuration: 1
 --- !u!1 &7092977998462913754
 GameObject:
   m_ObjectHideFlags: 0
