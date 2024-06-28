@@ -19857,13 +19857,15 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3054942120541986095}
+  - component: {fileID: 6481749199254839032}
+  - component: {fileID: 8278531663414982986}
   - component: {fileID: 3054942120541986090}
   - component: {fileID: 3054942120541986088}
   - component: {fileID: 537198729}
   - component: {fileID: 5731089695359280883}
   m_Layer: 7
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -19885,6 +19887,35 @@ Transform:
   - {fileID: 3463470687352281547}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6481749199254839032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3054942120541986084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83b243e21f9b2f94ab86a00c5d53d068, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetTilemapTag: Water
+  reloadDelay: 3
+  isPlayer: 1
+--- !u!114 &8278531663414982986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3054942120541986084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6af721c983b044543a9416237d1b2d28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  animator: {fileID: 0}
 --- !u!114 &3054942120541986090
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19899,7 +19930,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spriteTransform: {fileID: 3054942120714206839}
   <Stats>k__BackingField: {fileID: 11400000, guid: 894dfe33661263b42a8e1490d64c0424, type: 2}
-  _drawGizmos: 0
+  _drawGizmos: 1
+  _inCutscene: 0
 --- !u!50 &3054942120541986088
 Rigidbody2D:
   serializedVersion: 4
@@ -35089,7 +35121,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0.791, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 0}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 169643347645628049}
   m_Father: {fileID: 3054942120541986095}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &6483356806332713511
@@ -35162,9 +35195,9 @@ MonoBehaviour:
   floatRange: 0.2
   floatSpeed: 1
   followSpeed: 3
-  fireballPrefab: {fileID: 0}
-  firePoint: {fileID: 0}
-  fireRate: 0.5
+  fireballPrefab: {fileID: 414269863452689344, guid: 5a92982183e10cb4999148f5b7f13597, type: 3}
+  firePoint: {fileID: 169643347645628049}
+  fireRate: 1
 --- !u!1 &7092977998462913754
 GameObject:
   m_ObjectHideFlags: 0
@@ -39993,3 +40026,34 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!1 &8429687426948293236
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 169643347645628049}
+  m_Layer: 7
+  m_Name: Firepoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &169643347645628049
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8429687426948293236}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3463470687352281547}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
