@@ -1978,7 +1978,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -25.82, y: -13.21, z: -10}
+  m_LocalPosition: {x: 21.56, y: -9.45, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3403,16 +3403,20 @@ MonoBehaviour:
   fireRate: 1
   floatHeight: 0.2
   floatDuration: 0.5
-  rotationDuration: 1
+  rotationDuration: 2
   attachDuration: 1
   dialogueMessage: 'Oh no!                                                                                                                                           
     Laith what happened to me ! we need to find the witch . . '
-  dialogueDuration: 4
+  dialogueDuration: 6
   textOffset: {x: 0, y: 1.3, z: 0}
   textWidth: 2
   textHeight: 1
   textSortingOrder: 100
   sortingLayerName: UI
+  rootGrowthMechanic: {fileID: 1019525578}
+  rootGrowthKey: 114
+  rootGrowthCooldown: 2
+  rootGrowthMaxDistance: 5
 --- !u!212 &947275383
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3545,7 +3549,7 @@ MonoBehaviour:
   mainCamera: {fileID: 1652725675}
   cutsceneCamera: {fileID: 1226523734}
   zoomDuration: 1.5
-  dialogueDuration: 4
+  dialogueDuration: 6
 --- !u!4 &949479678
 Transform:
   m_ObjectHideFlags: 0
@@ -3557,6 +3561,90 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 23.598, y: -9.289, z: 0.7684864}
   m_LocalScale: {x: 1.9875, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1019525577
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1019525579}
+  - component: {fileID: 1019525578}
+  m_Layer: 0
+  m_Name: RootGrowth
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1019525578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1019525577}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8ed8fda94d9c18459bd364658691852, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  growthSpeed: 5
+  maxLength: 10
+  helixRadius: 0.5
+  helixFrequency: 2
+  pointsPerUnit: 5
+  colliderRadius: 0.35
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  rootColorGradient:
+    serializedVersion: 2
+    key0: {r: 0.49019608, g: 0.33606625, b: 0, a: 1}
+    key1: {r: 0.7101433, g: 1, b: 0, a: 1}
+    key2: {r: 0, g: 0, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 65535
+    ctime2: 0
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: -1
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 2
+  raycastDistance: 0.5
+--- !u!4 &1019525579
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1019525577}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -10.901165, y: -8.98557, z: -3.9617043}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -4019,11 +4107,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3054942120541986095, guid: a758f4c47c8e05242aa9c708a1c99374, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -25.82
+      value: 21.56
       objectReference: {fileID: 0}
     - target: {fileID: 3054942120541986095, guid: a758f4c47c8e05242aa9c708a1c99374, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -13.21
+      value: -9.45
       objectReference: {fileID: 0}
     - target: {fileID: 3054942120541986095, guid: a758f4c47c8e05242aa9c708a1c99374, type: 3}
       propertyPath: m_LocalPosition.z
@@ -8974,7 +9062,7 @@ Transform:
   m_GameObject: {fileID: 1652725674}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -25.82, y: -13.21, z: -10}
+  m_LocalPosition: {x: 21.56, y: -9.45, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -23080,3 +23168,4 @@ SceneRoots:
   - {fileID: 949479678}
   - {fileID: 1226523735}
   - {fileID: 76128842}
+  - {fileID: 1019525579}

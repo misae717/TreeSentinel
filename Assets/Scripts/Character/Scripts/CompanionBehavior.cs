@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using System.Collections;
+using TreeController;
 
 public class CompanionBehavior : MonoBehaviour
 {
@@ -29,12 +30,19 @@ public class CompanionBehavior : MonoBehaviour
     public int textSortingOrder = 100;
     public string sortingLayerName = "UI";
 
+    [Header("Root Growth")]
+    public RootGrowthMechanic rootGrowthMechanic;
+    public KeyCode rootGrowthKey = KeyCode.R;
+    public float rootGrowthCooldown = 5f;
+    public float rootGrowthMaxDistance = 5f;
+
     private float angle;
     private SpriteRenderer spriteRenderer;
     private SpriteRenderer playerSpriteRenderer;
     private float nextFireTime;
     private TextMeshPro dialogueText;
     private Vector3 initialPosition;
+    private float lastRootGrowthTime;
 
     private enum CompanionState
     {
@@ -55,8 +63,10 @@ public class CompanionBehavior : MonoBehaviour
 
         if (fireballPrefab == null) Debug.LogError("Fireball Prefab is not assigned");
         if (firePoint == null) Debug.LogError("Fire Point is not assigned");
+        if (rootGrowthMechanic == null) Debug.LogError("Root Growth Mechanic is not assigned");
 
         CreateDialogueText();
+        lastRootGrowthTime = -rootGrowthCooldown; // Allow immediate root growth at start
     }
 
     void Update()
@@ -74,6 +84,7 @@ public class CompanionBehavior : MonoBehaviour
             case CompanionState.Following:
                 FollowPlayer();
                 HandleFiring();
+                HandleRootGrowth();
                 break;
         }
     }
@@ -101,7 +112,6 @@ public class CompanionBehavior : MonoBehaviour
         dialogueText.enableWordWrapping = true;
         dialogueText.rectTransform.sizeDelta = new Vector2(textWidth, textHeight);
         
-        // Ensure text is facing the camera
         dialogueText.transform.rotation = Quaternion.LookRotation(Vector3.forward);
         
         dialogueText.sortingOrder = textSortingOrder;
@@ -240,5 +250,27 @@ public class CompanionBehavior : MonoBehaviour
 
         GameObject fireball = Instantiate(fireballPrefab, firePoint.position, Quaternion.identity);
         fireball.GetComponent<FireballBehavior>().SetDirection(direction);
+    }
+
+    private void HandleRootGrowth()
+    {
+        if (Input.GetKeyDown(rootGrowthKey) && Time.time >= lastRootGrowthTime + rootGrowthCooldown)
+        {
+            Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 companionPosition = transform.position;
+            float distanceToMouse = Vector2.Distance(mousePosition, companionPosition);
+
+            if (distanceToMouse <= rootGrowthMaxDistance)
+            {
+                if (rootGrowthMechanic.StartGrowth(mousePosition))
+                {
+                    lastRootGrowthTime = Time.time;
+                }
+            }
+        }
+        else if (Input.GetKeyUp(rootGrowthKey))
+        {
+            rootGrowthMechanic.StopGrowth();
+        }
     }
 }
