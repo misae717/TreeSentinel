@@ -35195,9 +35195,6 @@ MonoBehaviour:
   floatRange: 0.2
   floatSpeed: 1
   followSpeed: 3
-  fireballPrefab: {fileID: 414269863452689344, guid: 5a92982183e10cb4999148f5b7f13597, type: 3}
-  firePoint: {fileID: 169643347645628049}
-  fireRate: 1
   floatHeight: 1.5
   floatDuration: 2
   rotationDuration: 1
@@ -35212,7 +35209,6 @@ MonoBehaviour:
   textSortingOrder: 100
   sortingLayerName: UI
   rootGrowthMechanic: {fileID: 0}
-  rootGrowthKey: 114
   rootGrowthCooldown: 5
   rootGrowthMaxDistance: 5
 --- !u!1 &7092977998462913754

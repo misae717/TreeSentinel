@@ -149,10 +149,26 @@ public class RootGrowthMechanic : MonoBehaviour
                 colliders.Add(colliderObj);
             }
 
-            float t = i / (float)(desiredColliderCount - 1);
-            Vector3 position = Vector3.Lerp(pointsArrays[0][0], pointsArrays[0][pointsArrays[0].Count - 1], t);
-            colliders[i].transform.position = position;
-            colliders[i].GetComponent<CircleCollider2D>().radius = colliderRadius;
+            Vector3 position;
+            if (pointsArrays[0].Count > 1)
+            {
+                float t = i / (float)(desiredColliderCount - 1);
+                position = Vector3.Lerp(pointsArrays[0][0], pointsArrays[0][pointsArrays[0].Count - 1], t);
+            }
+            else
+            {
+                position = transform.position; // Default to the root's origin if not enough points
+            }
+
+            if (!float.IsNaN(position.x) && !float.IsNaN(position.y) && !float.IsNaN(position.z))
+            {
+                colliders[i].transform.position = position;
+                colliders[i].GetComponent<CircleCollider2D>().radius = colliderRadius;
+            }
+            else
+            {
+                Debug.LogWarning($"Invalid position calculated for collider {i}: {position}");
+            }
         }
     }
 

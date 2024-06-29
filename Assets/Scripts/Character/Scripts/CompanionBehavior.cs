@@ -11,9 +11,6 @@ public class CompanionBehavior : MonoBehaviour
     public float floatRange = 0.2f;
     public float floatSpeed = 1.0f;
     public float followSpeed = 3.0f;
-    public GameObject fireballPrefab;
-    public Transform firePoint;
-    public float fireRate = 0.5f;
 
     public float floatHeight = 0.02f;
     public float floatDuration = 0.5f;
@@ -32,14 +29,12 @@ public class CompanionBehavior : MonoBehaviour
 
     [Header("Root Growth")]
     public RootGrowthMechanic rootGrowthMechanic;
-    public KeyCode rootGrowthKey = KeyCode.R;
     public float rootGrowthCooldown = 5f;
     public float rootGrowthMaxDistance = 5f;
 
     private float angle;
     private SpriteRenderer spriteRenderer;
     private SpriteRenderer playerSpriteRenderer;
-    private float nextFireTime;
     private TextMeshPro dialogueText;
     private Vector3 initialPosition;
     private float lastRootGrowthTime;
@@ -61,8 +56,6 @@ public class CompanionBehavior : MonoBehaviour
         playerSpriteRenderer = player.Find("Visual/Effects/Sprite").GetComponent<SpriteRenderer>();
         initialPosition = transform.position;
 
-        if (fireballPrefab == null) Debug.LogError("Fireball Prefab is not assigned");
-        if (firePoint == null) Debug.LogError("Fire Point is not assigned");
         if (rootGrowthMechanic == null) Debug.LogError("Root Growth Mechanic is not assigned");
 
         CreateDialogueText();
@@ -83,7 +76,6 @@ public class CompanionBehavior : MonoBehaviour
                 break;
             case CompanionState.Following:
                 FollowPlayer();
-                HandleFiring();
                 HandleRootGrowth();
                 break;
         }
@@ -228,33 +220,9 @@ public class CompanionBehavior : MonoBehaviour
         }
     }
 
-    private void HandleFiring()
-    {
-        if (Input.GetMouseButton(0) && Time.time > nextFireTime)
-        {
-            Fire();
-            nextFireTime = Time.time + fireRate;
-        }
-    }
-
-    private void Fire()
-    {
-        if (fireballPrefab == null || firePoint == null)
-        {
-            Debug.LogError("Fireball Prefab or Fire Point is not assigned");
-            return;
-        }
-
-        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 direction = (mousePosition - firePoint.position).normalized;
-
-        GameObject fireball = Instantiate(fireballPrefab, firePoint.position, Quaternion.identity);
-        fireball.GetComponent<FireballBehavior>().SetDirection(direction);
-    }
-
     private void HandleRootGrowth()
     {
-        if (Input.GetKeyDown(rootGrowthKey) && Time.time >= lastRootGrowthTime + rootGrowthCooldown)
+        if ((Input.GetKeyDown(KeyCode.R) || Input.GetMouseButtonDown(0)) && Time.time >= lastRootGrowthTime + rootGrowthCooldown)
         {
             Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector2 companionPosition = transform.position;
@@ -268,7 +236,7 @@ public class CompanionBehavior : MonoBehaviour
                 }
             }
         }
-        else if (Input.GetKeyUp(rootGrowthKey))
+        else if (Input.GetKeyUp(KeyCode.R) || Input.GetMouseButtonUp(0))
         {
             rootGrowthMechanic.StopGrowth();
         }
