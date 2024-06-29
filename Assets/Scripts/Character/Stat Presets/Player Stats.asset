@@ -21,7 +21,7 @@ MonoBehaviour:
   CharacterSize:
     Height: 1.21
     Width: 0.27
-    StepHeight: 0.74571013
+    StepHeight: 0.24
     CrouchHeight: 1.21
     RayInset: 0.0265
   VerticalDeadZoneThreshold: 0.3
@@ -36,7 +36,7 @@ MonoBehaviour:
   ExtraConstantGravity: 40
   BufferedJumpTime: 0.15
   CoyoteTime: 0.15
-  JumpPower: 10
+  JumpPower: 12
   EndJumpEarlyExtraForceMultiplier: 3
   MaxAirJumps: 1
   AllowDash: 1
@@ -47,7 +47,7 @@ MonoBehaviour:
   AllowCrouching: 0
   CrouchSlowDownTime: 1
   CrouchSpeedModifier: 0.3
-  AllowWalls: 1
+  AllowWalls: 0
   ClimbableLayer:
     serializedVersion: 2
     m_Bits: 256
@@ -56,7 +56,7 @@ MonoBehaviour:
   RequireInputPush: 0
   WallJumpPower: {x: 20, y: 18}
   WallPushPower: {x: 20, y: 18}
-  WallClimbSpeed: 5
+  WallClimbSpeed: 1
   WallFallAcceleration: 5
   WallPopForce: 10
   WallCoyoteTime: 0.3

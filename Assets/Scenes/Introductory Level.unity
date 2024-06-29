@@ -1978,7 +1978,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 21.56, y: -9.45, z: -10}
+  m_LocalPosition: {x: -26.08, y: -13.35, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3398,9 +3398,6 @@ MonoBehaviour:
   floatRange: 0.2
   floatSpeed: 1
   followSpeed: 3
-  fireballPrefab: {fileID: 414269863452689344, guid: 5a92982183e10cb4999148f5b7f13597, type: 3}
-  firePoint: {fileID: 1893531721}
-  fireRate: 1
   floatHeight: 0.2
   floatDuration: 0.5
   rotationDuration: 2
@@ -3414,7 +3411,6 @@ MonoBehaviour:
   textSortingOrder: 100
   sortingLayerName: UI
   rootGrowthMechanic: {fileID: 1019525578}
-  rootGrowthKey: 114
   rootGrowthCooldown: 2
   rootGrowthMaxDistance: 5
 --- !u!212 &947275383
@@ -3940,6 +3936,26 @@ Tilemap:
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
       m_AllTileFlags: 1073741825
+  - first: {x: -25, y: -6, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 5
+      m_TileSpriteIndex: 5
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_TileObjectToInstantiateIndex: 65535
+      dummyAlignment: 0
+      m_AllTileFlags: 1073741825
+  - first: {x: -25, y: -5, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 6
+      m_TileSpriteIndex: 6
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_TileObjectToInstantiateIndex: 65535
+      dummyAlignment: 0
+      m_AllTileFlags: 1073741825
   m_AnimatedTiles: {}
   m_TileAssetArray:
   - m_RefCount: 15
@@ -3952,6 +3968,10 @@ Tilemap:
     m_Data: {fileID: 11400000, guid: d74f9228943dec04aac04d15683a2a31, type: 2}
   - m_RefCount: 1
     m_Data: {fileID: 11400000, guid: c6c246571e801bb498d4709b873ff0dd, type: 2}
+  - m_RefCount: 1
+    m_Data: {fileID: 11400000, guid: 2a614db3652cebc41ab6f36a0557b31e, type: 2}
+  - m_RefCount: 1
+    m_Data: {fileID: 11400000, guid: 04ff201f81f2d9b40bcd79c42ed5281f, type: 2}
   m_TileSpriteArray:
   - m_RefCount: 15
     m_Data: {fileID: -827415920, guid: abd3ef08874d6fd4ea86628e3c6dcc63, type: 3}
@@ -3963,8 +3983,12 @@ Tilemap:
     m_Data: {fileID: 1964727330, guid: abd3ef08874d6fd4ea86628e3c6dcc63, type: 3}
   - m_RefCount: 1
     m_Data: {fileID: 891104751, guid: abd3ef08874d6fd4ea86628e3c6dcc63, type: 3}
+  - m_RefCount: 1
+    m_Data: {fileID: 310794859, guid: abd3ef08874d6fd4ea86628e3c6dcc63, type: 3}
+  - m_RefCount: 1
+    m_Data: {fileID: 607354713, guid: abd3ef08874d6fd4ea86628e3c6dcc63, type: 3}
   m_TileMatrixArray:
-  - m_RefCount: 20
+  - m_RefCount: 22
     m_Data:
       e00: 1
       e01: 0
@@ -3983,7 +4007,7 @@ Tilemap:
       e32: 0
       e33: 1
   m_TileColorArray:
-  - m_RefCount: 20
+  - m_RefCount: 22
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
@@ -4107,11 +4131,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3054942120541986095, guid: a758f4c47c8e05242aa9c708a1c99374, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 21.56
+      value: -26.08
       objectReference: {fileID: 0}
     - target: {fileID: 3054942120541986095, guid: a758f4c47c8e05242aa9c708a1c99374, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -9.45
+      value: -13.35
       objectReference: {fileID: 0}
     - target: {fileID: 3054942120541986095, guid: a758f4c47c8e05242aa9c708a1c99374, type: 3}
       propertyPath: m_LocalPosition.z
@@ -4292,8 +4316,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9b7c1fb1d70f73429f870cdb845168a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  signText: Leo empowers you with an abillity to dash !                                                                                               
-    Press X or Right click.
+  signText: Leo empowers you with an abillity to dash and Grow Roots!                                                                                               
+    Press R or Left Click and X or Right Click!.
   displayDistance: 3
   textSortingOrder: 100
   sortingLayerName: UI
@@ -9062,7 +9086,7 @@ Transform:
   m_GameObject: {fileID: 1652725674}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 21.56, y: -9.45, z: -10}
+  m_LocalPosition: {x: -26.08, y: -13.35, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
