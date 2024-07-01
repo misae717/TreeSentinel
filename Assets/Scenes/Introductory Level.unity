@@ -4841,7 +4841,7 @@ MonoBehaviour:
   helixRadius: 0.2
   helixFrequency: 1.5
   pointsPerUnit: 5
-  colliderRadius: 0.35
+  colliderRadius: 0.45
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 8
