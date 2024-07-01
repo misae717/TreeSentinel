@@ -16,6 +16,7 @@ public class CompanionBehavior : MonoBehaviour
     public float floatDuration = 0.5f;
     public float rotationDuration = 1f;
     public float attachDuration = 1f;
+    public bool skipCutscene = false;
 
     [Header("Dialogue")]
     [TextArea(2, 5)]
@@ -38,6 +39,7 @@ public class CompanionBehavior : MonoBehaviour
     private TextMeshPro dialogueText;
     private Vector3 initialPosition;
     private float lastRootGrowthTime;
+    private bool cutsceneTriggered = false;
 
     private enum CompanionState
     {
@@ -60,6 +62,11 @@ public class CompanionBehavior : MonoBehaviour
 
         CreateDialogueText();
         lastRootGrowthTime = -rootGrowthCooldown; // Allow immediate root growth at start
+
+        if (skipCutscene)
+        {
+            InitializeFollowingState();
+        }
     }
 
     void Update()
@@ -67,6 +74,8 @@ public class CompanionBehavior : MonoBehaviour
         switch (currentState)
         {
             case CompanionState.OnGround:
+                // Wait for cutscene trigger
+                break;
             case CompanionState.Floating:
             case CompanionState.Standing:
                 // These states are handled by coroutines
@@ -116,9 +125,13 @@ public class CompanionBehavior : MonoBehaviour
         }
     }
 
-    public void StartCutscene()
+    public void TriggerCutscene()
     {
-        StartCoroutine(CutsceneSequence());
+        if (!cutsceneTriggered && !skipCutscene)
+        {
+            cutsceneTriggered = true;
+            StartCoroutine(CutsceneSequence());
+        }
     }
 
     private IEnumerator CutsceneSequence()
@@ -198,6 +211,15 @@ public class CompanionBehavior : MonoBehaviour
         transform.localPosition = new Vector3(0, radius, 0);
         transform.localRotation = Quaternion.identity;
         transform.localScale = Vector3.one;
+    }
+
+    private void InitializeFollowingState()
+    {
+        transform.SetParent(player);
+        transform.localPosition = new Vector3(0, radius, 0);
+        transform.localRotation = Quaternion.identity;
+        transform.localScale = Vector3.one;
+        currentState = CompanionState.Following;
     }
 
     private void FollowPlayer()

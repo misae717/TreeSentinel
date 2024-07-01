@@ -43,7 +43,7 @@ public class CutsceneManager : MonoBehaviour
         yield return new WaitForSeconds(dialogueDuration);
 
         // Start companion's cutscene sequence
-        companion.StartCutscene();
+        companion.TriggerCutscene();
 
         // Wait for companion's animation to finish (floating + attaching)
         yield return new WaitForSeconds(companion.floatDuration + companion.attachDuration + 2f); // Added 2 seconds for dialogue wait in companion script

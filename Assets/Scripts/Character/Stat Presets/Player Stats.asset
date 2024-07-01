@@ -40,7 +40,7 @@ MonoBehaviour:
   EndJumpEarlyExtraForceMultiplier: 3
   MaxAirJumps: 1
   AllowDash: 1
-  DashVelocity: 30
+  DashVelocity: 20
   DashDuration: 0.1
   DashCooldown: 0.5
   DashEndHorizontalMultiplier: 0.5

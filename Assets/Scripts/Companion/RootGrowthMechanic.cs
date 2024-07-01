@@ -13,6 +13,8 @@ public class RootGrowthMechanic : MonoBehaviour
     public LayerMask obstacleLayer;
     public Gradient rootColorGradient;
     public float raycastDistance = 0.5f;
+    public int rootSortingOrder = 10;
+    public string rootSortingLayerName = "Default";
 
     private LineRenderer[] lineRenderers;
     private List<Vector3>[] pointsArrays;
@@ -39,6 +41,10 @@ public class RootGrowthMechanic : MonoBehaviour
             lineRenderers[i].endWidth = 0.05f;
             lineRenderers[i].material = new Material(Shader.Find("Sprites/Default"));
             lineRenderers[i].positionCount = 0;
+            
+            // Set sorting order and layer
+            lineRenderers[i].sortingOrder = rootSortingOrder;
+            lineRenderers[i].sortingLayerName = rootSortingLayerName;
         }
     }
 
