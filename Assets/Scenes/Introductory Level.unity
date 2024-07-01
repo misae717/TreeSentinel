@@ -2752,7 +2752,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 218b21d113ec1324299f8e008e76eef3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextLevelName: NextLevel
+  nextLevelName: Level 1
   delayBeforeLoading: 1
   victoryEffect: {fileID: 0}
 --- !u!61 &326329334
